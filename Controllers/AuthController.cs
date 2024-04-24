@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewsAPI.DTOs;
+using NewsAPI.Interfaces;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,14 +12,16 @@ namespace NewsAPI.Controllers
     public class AuthController : BaseController
     {
         private readonly Context _context;
+        private readonly ITokenService _tokenService;
 
-        public AuthController(Context context)
+        public AuthController(Context context, ITokenService tokenService)
         {
             _context = context;
+            _tokenService = tokenService;
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(RegisterDto registerDto)
+        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
 
             if (await isUserExists(registerDto.Email))
@@ -37,10 +40,17 @@ namespace NewsAPI.Controllers
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
-            return Ok(user);
+            return Ok(
+                new UserDto()
+                {
+                    Name = user.Name,
+                    Email = user.Email,
+                    Token = _tokenService.CreateToken(user),
+                }
+            );
         }
 
-
+        [HttpPost("login")]
         public async Task<ActionResult<User>> Login(LoginDto loginDto)
         {
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginDto.Email);
@@ -51,7 +61,14 @@ namespace NewsAPI.Controllers
             byte[] computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
             if (!computedHash.SequenceEqual(user.PasswordHash)) return Unauthorized();
 
-            return Ok(user);
+            return Ok(
+                new UserDto()
+                {
+                    Name = user.Name,
+                    Email = user.Email,
+                    Token = _tokenService.CreateToken(user),
+                }
+            );
 
         }
 

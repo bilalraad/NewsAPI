@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace NewsAPI;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly Context _context;
@@ -17,6 +19,7 @@ public class UsersController : ControllerBase
 
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<User>>> GetAllAsync()
     {
         IEnumerable<User> users = await _context.Users.ToListAsync();
