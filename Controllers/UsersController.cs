@@ -6,7 +6,7 @@ namespace NewsAPI;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+// [Authorize]
 public class UsersController : ControllerBase
 {
     private readonly Context _context;
@@ -50,4 +50,7 @@ public class UsersController : ControllerBase
     //     // TODO: Implement logic to delete a user by id
     //     return Ok();
     // }
+
+
+
 }
