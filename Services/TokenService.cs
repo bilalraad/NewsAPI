@@ -14,7 +14,7 @@ namespace NewsAPI.Services
 
         public TokenService(IConfiguration configuration)
         {
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["secretKey"]));
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["secretKey"] ?? "YouShouldChangeThis"));
         }
 
         public string CreateToken(User user)

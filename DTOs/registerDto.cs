@@ -1,5 +1,3 @@
-
-
 using System.ComponentModel.DataAnnotations;
 
 namespace NewsAPI.DTOs
@@ -7,11 +5,13 @@ namespace NewsAPI.DTOs
     public class RegisterDto
     {
         [Required]
-        public string Name { get; set; }
+        public required string Name { get; set; }
         [Required]
-        public string Email { get; set; }
+        public required string Email { get; set; }
         [Required]
-        public string Password { get; set; }
+        public required string Password { get; set; }
+        [Required]
+        public required Gender gender { get; set; }
 
     }
 }

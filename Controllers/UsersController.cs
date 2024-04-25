@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NewsAPI.Controllers;
+using NewsAPI.DTOs;
 
 namespace NewsAPI;
 
-[ApiController]
-[Route("api/[controller]")]
-// [Authorize]
-public class UsersController : ControllerBase
+
+[Authorize]
+public class UsersController : BaseController
 {
     private readonly Context _context;
 
@@ -19,38 +20,19 @@ public class UsersController : ControllerBase
 
 
     [HttpGet]
-    [Authorize]
     public async Task<ActionResult<IEnumerable<User>>> GetAllAsync()
     {
         IEnumerable<User> users = await _context.Users.ToListAsync();
-        return Ok(users);
+        return Ok(users.Select(u => UserDto.FromUser(u)));
     }
 
     // GET: api/users/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<User>> Get(int id)
     {
-        User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-        return Ok(user);
+        User? user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        return user == null ? NotFound() : Ok(UserDto.FromUser(user));
     }
-
-    // POST: api/users
-    // [HttpPost]
-    // public IActionResult Post([FromBody] User user)
-    // {
-    //     // TODO: Implement logic to create a new user
-    //     return Ok();
-    // }
-
-
-    // DELETE: api/users/{id}
-    // [HttpDelete("{id}")]
-    // public IActionResult Delete(int id)
-    // {
-    //     // TODO: Implement logic to delete a user by id
-    //     return Ok();
-    // }
-
 
 
 }

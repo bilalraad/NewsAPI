@@ -4,11 +4,9 @@ using NewsAPI.DTOs;
 using NewsAPI.Interfaces;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace NewsAPI.Controllers
 {
-
     public class AuthController : BaseController
     {
         private readonly Context _context;
@@ -53,7 +51,7 @@ namespace NewsAPI.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<User>> Login(LoginDto loginDto)
         {
-            User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginDto.Email);
+            User? user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginDto.Email);
 
             if (user == null) return Unauthorized();
 

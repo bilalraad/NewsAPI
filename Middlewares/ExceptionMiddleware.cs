@@ -1,10 +1,6 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using NewsAPI.Errors;
-using System;
 using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace NewsAPI.Middlewares
 {
@@ -41,7 +37,7 @@ namespace NewsAPI.Middlewares
                 // Customize the error response based on the environment
                 if (_environment.IsDevelopment())
                 {
-                    apiError.Details = ex.StackTrace.ToString();
+                    apiError.Details = ex.StackTrace?.ToString();
                 }
                 else
                 {

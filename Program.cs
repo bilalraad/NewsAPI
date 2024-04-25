@@ -1,12 +1,8 @@
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using NewsAPI;
+using NewsAPI.Data;
 using NewsAPI.Extensions;
-using NewsAPI.Interfaces;
 using NewsAPI.Middlewares;
-using NewsAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +32,25 @@ app.UseAuthorization();
 
 //*: this is added to detect all controllers
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+
+try
+{
+    var context = services.GetRequiredService<Context>();
+    await context.Database.MigrateAsync();
+    await Seed.UsersSeed(context);
+    await Seed.NewsSeed(context);
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occurred during migration");
+    throw;
+}
+
+
 app.Run();
 
 
