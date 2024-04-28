@@ -11,7 +11,7 @@ namespace NewsAPI.DTOs
         [Required]
         public required string Password { get; set; }
         [Required]
-        public required Gender gender { get; set; }
+        public required Gender Gender { get; set; }
 
     }
 }

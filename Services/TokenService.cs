@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using NewsAPI.Interfaces;
@@ -36,6 +37,16 @@ namespace NewsAPI.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
 
+        }
+
+
+
+        public (byte[], byte[]) GenerateHash(string password, byte[]? salt)
+        {
+
+            using HMACSHA512 hmac = salt != null ? new HMACSHA512(salt) : new HMACSHA512();
+            byte[] computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return (computedHash, hmac.Key);
         }
     }
 }

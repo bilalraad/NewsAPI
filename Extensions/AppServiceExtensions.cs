@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NewsAPI.Interfaces;
+using NewsAPI.Repositories;
 using NewsAPI.Services;
 
 namespace NewsAPI.Extensions
@@ -52,6 +53,11 @@ namespace NewsAPI.Extensions
             services.AddControllers();
             services.AddCors();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<INewsRepository, NewsRepository>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             return services;
         }
     }

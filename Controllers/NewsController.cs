@@ -1,81 +1,53 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using NewsAPI.DTOs;
-using NewsAPI.Entities;
+using NewsAPI.Interfaces;
 
 namespace NewsAPI.Controllers
 {
     [Authorize]
     public class NewsController : BaseController
     {
-        private readonly Context _context;
-        private readonly ILogger<NewsController> _logger;
+        private readonly INewsRepository _newsRepository;
 
-        public NewsController(Context context, ILogger<NewsController> logger)
+        public NewsController(INewsRepository newsRepository)
         {
-            _context = context;
-            _logger = logger;
+            _newsRepository = newsRepository;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<News>>> GetAll()
+        public async Task<ActionResult<IEnumerable<NewsDto>>> GetAll()
         {
-            IEnumerable<News> news = await _context.News.ToListAsync();
-            return Ok(news);
+            return await _newsRepository.GetAllNews();
         }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<ActionResult<News>> GetById(int id)
+        public async Task<ActionResult<NewsDto>> GetById(int id)
         {
-            var news = await _context.News.FirstOrDefaultAsync(n => n.Id == id);
-            if (news == null) return NotFound();
 
-            return Ok(news);
+            return await _newsRepository.GetNewsById(id);
         }
 
         [HttpPost]
-        public async Task<ActionResult<News>> Create(CreateNewsDto newsDto)
+        public async Task<ActionResult> Create(CreateNewsDto newsDto)
         {
-            News news = new News
-            {
-                Title = newsDto.Title,
-                Content = newsDto.Content,
-                Author = newsDto.AuthorId.ToString(),
-                // photos = newsDto.Photos.Select(p => new Photo { Url = p.Url, IsMain = p.IsMain, PublicId = p.PublicId, }).ToList(),
-                tags = newsDto.Tags,
-            };
-            await _context.News.AddAsync(news);
 
-            _context.SaveChanges();
-            return Ok(news);
+            return await _newsRepository.AddNews(newsDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<NoContentResult>> Update(int id, CreateNewsDto updatedNewsDto)
+        public async Task<ActionResult> Update(int id, UpdateNewsDto updatedNewsDto)
         {
-            News? news = await _context.News.FirstOrDefaultAsync(n => n.Id == id);
-            if (news == null) return NotFound();
 
-            news.Title = updatedNewsDto.Title;
-            news.Content = updatedNewsDto.Content;
-            // if (updatedNewsDto.Photos?.Count > 0)
-            // news.photos = updatedNewsDto.Photos;
-            _context.SaveChanges();
-            return NoContent();
+            return await _newsRepository.UpdateNews(id, updatedNewsDto);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<NoContentResult>> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var news = await _context.News.FirstOrDefaultAsync(n => n.Id == id);
-            if (news == null) return NotFound();
-
-            _context.News.Remove(news);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            return await _newsRepository.DeleteNews(id);
         }
     }
 }

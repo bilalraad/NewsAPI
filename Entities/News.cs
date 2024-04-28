@@ -5,12 +5,12 @@ namespace NewsAPI.Entities
         public int Id { get; set; }
         public required string Title { get; set; }
         public required string Content { get; set; }
-        public required string Author { get; set; }
-        public List<Photo> photos { get; set; } = new();
+        public required int AuthorId { get; set; }
+        public List<Photo> Photos { get; set; } = new();
 
-        public List<string> tags { get; set; } = new();
+        public List<string> Tags { get; set; } = new();
 
-        public List<Comment> comments { get; set; } = new();
+        public List<Comment> Comments { get; set; } = new();
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 

@@ -15,7 +15,5 @@ namespace NewsAPI.DTOs
 
         public bool IsPublished { get; set; } = true;
 
-
-
     }
 }

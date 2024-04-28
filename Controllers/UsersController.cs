@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using NewsAPI.Controllers;
 using NewsAPI.DTOs;
+using NewsAPI.Interfaces;
 
 namespace NewsAPI;
 
@@ -10,29 +10,26 @@ namespace NewsAPI;
 [Authorize]
 public class UsersController : BaseController
 {
-    private readonly Context _context;
+    private readonly IUserRepository _userRepository;
 
-    public UsersController(Context context)
+    public UsersController(IUserRepository userRepository)
     {
-        _context = context;
+        _userRepository = userRepository;
     }
 
-
-
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetAllAsync()
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetAllAsync()
     {
-        IEnumerable<User> users = await _context.Users.ToListAsync();
-        return Ok(users.Select(u => UserDto.FromUser(u)));
+        return await _userRepository.GetAllUsers();
+
     }
 
     // GET: api/users/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> Get(int id)
+    public async Task<ActionResult<UserDto>> Get(int id)
     {
-        User? user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-        return user == null ? NotFound() : Ok(UserDto.FromUser(user));
-    }
+        return await _userRepository.GetUserById(id);
 
+    }
 
 }

@@ -21,7 +21,7 @@ namespace NewsAPI.Data
                 };
                 var users = JsonSerializer.Deserialize<List<RegisterDto>>(usersData, options);
 
-                foreach (var userData in users)
+                foreach (var userData in users ?? [])
                 {
                     using HMACSHA512 hmac = new HMACSHA512();
                     User user = new User
@@ -50,16 +50,16 @@ namespace NewsAPI.Data
                 List<CreateNewsDto>? newsList = JsonSerializer.Deserialize<List<CreateNewsDto>>(newsData, options);
 
 
-                foreach (var newsObj in newsList)
+                foreach (var newsObj in newsList ?? [])
                 {
                     News news = new News
                     {
                         Title = newsObj.Title,
                         Content = newsObj.Content,
-                        tags = newsObj.Tags,
-                        Author = newsObj.AuthorId.ToString(),
+                        Tags = newsObj.Tags,
+                        AuthorId = newsObj.AuthorId,
                     };
-                    news.photos = newsObj.Photos.Select(p => new Photo { Url = p.Url, IsMain = p.IsMain, PublicId = p.PublicId, NewsId = news.Id, News = news }).ToList();
+                    news.Photos = newsObj.Photos.Select(p => new Photo { Url = p.Url, IsMain = p.IsMain, PublicId = p.PublicId, NewsId = news.Id, News = news }).ToList();
                     await context.News.AddAsync(news);
                 }
                 await context.SaveChangesAsync();
