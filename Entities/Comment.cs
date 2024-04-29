@@ -16,6 +16,6 @@ namespace NewsAPI.Entities
         public required News News { get; set; }
 
         public int UserId { get; set; }
-        public required User User { get; set; }
+        public required AppUser User { get; set; }
     }
 }

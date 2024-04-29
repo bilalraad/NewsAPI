@@ -26,7 +26,7 @@ namespace NewsAPI.Repositories
 
         public async Task<ActionResult<AuthDto>> Login(LoginDto loginDto)
         {
-            User? user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginDto.Email);
+            AppUser? user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginDto.Email);
 
             if (user == null) return new UnauthorizedResult();
             var (computedHash, _) = _tokenService.GenerateHash(loginDto.Password, user.PasswordSalt);
@@ -52,7 +52,7 @@ namespace NewsAPI.Repositories
 
 
             var (hash, salt) = _tokenService.GenerateHash(registerDto.Password);
-            User user = new User
+            AppUser user = new AppUser
             {
                 Name = registerDto.Name,
                 Email = registerDto.Email,

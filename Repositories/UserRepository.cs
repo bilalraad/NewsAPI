@@ -21,7 +21,7 @@ namespace NewsAPI.Repositories
         }
         public async Task<ActionResult> AddUser(RegisterDto registerDto)
         {
-            User user = _mapper.Map<User>(registerDto);
+            AppUser user = _mapper.Map<AppUser>(registerDto);
             var (hash, salt) = _tokenService.GenerateHash(registerDto.Password);
             user.PasswordHash = hash;
             user.PasswordSalt = salt;
@@ -33,7 +33,7 @@ namespace NewsAPI.Repositories
 
         public async Task<ActionResult> DeleteUser(int id)
         {
-            User? user = await _context.Users.FindAsync(id);
+            AppUser? user = await _context.Users.FindAsync(id);
             if (user == null) return new NotFoundResult();
 
             _context.Users.Remove(user);
@@ -50,17 +50,30 @@ namespace NewsAPI.Repositories
 
         }
 
-        public async Task<ActionResult<UserDto>> GetUserById(int id)
+        public async Task<UserDto?> GetUserByEmail(string email)
+        {
+            UserDto? user = await _context.Users
+                .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(u => u.Email == email);
+            return user;
+        }
+
+        public async Task<UserDto?> GetUserById(int id)
         {
             UserDto? user = await _context.Users
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(u => u.Id == id);
-            return user != null ? new OkObjectResult(user) : new NotFoundResult();
+            return user;
         }
 
-        public Task<ActionResult> UpdateUser(UpdateUserDto user)
+        public async Task<ActionResult> UpdateUser(int id, UpdateUserDto updateUserDto)
         {
-            throw new NotImplementedException();
+
+            AppUser? oldUser = await _context.Users.FindAsync(id);
+            if (oldUser == null) return new NotFoundResult();
+            _mapper.Map(updateUserDto, oldUser);
+            await _context.SaveChangesAsync();
+            return new NoContentResult();
         }
 
 

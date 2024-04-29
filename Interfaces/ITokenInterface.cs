@@ -8,7 +8,7 @@ namespace NewsAPI.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(User user);
+        string CreateToken(AppUser user);
 
         (byte[], byte[]) GenerateHash(string password, [Optional] byte[]? salt);
     }

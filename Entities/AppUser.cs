@@ -1,6 +1,8 @@
-﻿namespace NewsAPI;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-public class User
+namespace NewsAPI;
+[Table("users")]
+public class AppUser
 {
     public int Id { get; set; }
     public required string Name { get; set; }

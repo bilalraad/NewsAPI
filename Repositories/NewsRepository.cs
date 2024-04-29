@@ -55,17 +55,11 @@ namespace NewsAPI.Repositories
 
 
 
-        public async Task<ActionResult> UpdateNews(int id, UpdateNewsDto news)
+        public async Task<ActionResult> UpdateNews(int id, UpdateNewsDto updateNewsDto)
         {
-            News? existingNews = await _context.News.FindAsync(id);
-            if (existingNews == null) return new NotFoundResult();
-
-            existingNews.Title = news.Title ?? existingNews.Title;
-            existingNews.Content = news.Content ?? existingNews.Content;
-            existingNews.Photos = news.Photos?.Select(p => _mapper.Map<Photo>(p)).ToList() ?? existingNews.Photos;
-            existingNews.Tags = news.Tags ?? existingNews.Tags;
-            existingNews.UpdatedAt = DateTime.Now;
-
+            News? oldNews = await _context.News.FindAsync(id);
+            if (oldNews == null) return new NotFoundResult();
+            _mapper.Map(updateNewsDto, oldNews);
             await _context.SaveChangesAsync();
             return new NoContentResult();
 

@@ -14,9 +14,9 @@ namespace NewsAPI.Helpers
             CreateMap<Comment, CommentDto>();
             CreateMap<CreateNewsDto, News>();
             CreateMap<UpdateNewsDto, News>();
-            CreateMap<User, UserDto>();
-            CreateMap<RegisterDto, User>();
-            CreateMap<UpdateUserDto, User>();
+            CreateMap<AppUser, UserDto>();
+            CreateMap<RegisterDto, AppUser>();
+            CreateMap<UpdateUserDto, AppUser>();
         }
 
 

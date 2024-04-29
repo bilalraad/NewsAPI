@@ -24,7 +24,7 @@ namespace NewsAPI.Data
                 foreach (var userData in users ?? [])
                 {
                     using HMACSHA512 hmac = new HMACSHA512();
-                    User user = new User
+                    AppUser user = new AppUser
                     {
                         Name = userData.Name,
                         Email = userData.Email,

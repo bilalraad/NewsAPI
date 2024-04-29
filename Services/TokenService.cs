@@ -18,7 +18,7 @@ namespace NewsAPI.Services
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["secretKey"] ?? "YouShouldChangeThis"));
         }
 
-        public string CreateToken(User user)
+        public string CreateToken(AppUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var claims = new Claim[]
