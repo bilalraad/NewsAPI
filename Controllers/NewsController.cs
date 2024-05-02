@@ -19,35 +19,35 @@ namespace NewsAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<NewsDto>>> GetAll()
         {
-            return await _newsRepository.GetAllNews();
+            return await _newsRepository.GetAllNewsAsync();
         }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<ActionResult<NewsDto>> GetById(int id)
+        public async Task<ActionResult<NewsDto>> GetById(Guid id)
         {
 
-            return await _newsRepository.GetNewsById(id);
+            return await _newsRepository.GetNewsByIdAsync(id);
         }
 
         [HttpPost]
         public async Task<ActionResult> Create(CreateNewsDto newsDto)
         {
 
-            return await _newsRepository.AddNews(newsDto);
+            return await _newsRepository.AddNewsAsync(newsDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, UpdateNewsDto updatedNewsDto)
+        public async Task<ActionResult> Update(Guid id, UpdateNewsDto updatedNewsDto)
         {
 
-            return await _newsRepository.UpdateNews(id, updatedNewsDto);
+            return await _newsRepository.UpdateNewsAsync(id, updatedNewsDto);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
-            return await _newsRepository.DeleteNews(id);
+            return await _newsRepository.DeleteNewsAsync(id);
         }
     }
 }

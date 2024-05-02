@@ -1,6 +1,6 @@
 namespace NewsAPI.DTOs
 {
-    public class UploadImageDto
+    public class UploadDto
     {
         public required IFormFile File { get; set; }
 

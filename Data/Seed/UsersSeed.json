@@ -3,90 +3,90 @@
     "Name": "John Doe",
     "Email": "johndoe@example.com",
     "gender": 0,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "Jane Smith",
     "Email": "janesmith@example.com",
     "gender": 1,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "Michael Johnson",
     "Email": "michaeljohnson@example.com",
     "gender": 0,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "Emily Davis",
     "Email": "emilydavis@example.com",
     "gender": 1,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "David Wilson",
     "Email": "davidwilson@example.com",
     "gender": 0,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "Sarah Anderson",
     "Email": "sarahanderson@example.com",
     "gender": 1,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "Daniel Martinez",
     "Email": "danielmartinez@example.com",
     "gender": 0,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "Olivia Taylor",
     "Email": "oliviataylor@example.com",
     "gender": 1,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "Matthew Thomas",
     "Email": "matthewthomas@example.com",
     "gender": 0,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "Sophia Hernandez",
     "Email": "sophiahernandez@example.com",
     "gender": 1,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "Andrew Moore",
     "Email": "andrewmoore@example.com",
     "gender": 0,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "Ava Clark",
     "Email": "avaclark@example.com",
     "gender": 1,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "James Lee",
     "Email": "jameslee@example.com",
     "gender": 0,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "Mia Lewis",
     "Email": "mialewis@example.com",
     "gender": 1,
-    "Password": "test"
+    "Password": "password@123s"
   },
   {
     "Name": "Benjamin Walker",
     "Email": "benjaminwalker@example.com",
     "gender": 0,
-    "Password": "test"
+    "Password": "password@123s"
   }
 ]

@@ -19,12 +19,12 @@ namespace NewsAPI.Repositories
             _mapper = mapper;
         }
 
-        public async Task<bool> isUserExists(string email)
+        public async Task<bool> isUserExistsAsync(string email)
         {
             return await _context.Users.AnyAsync(u => u.Email == email);
         }
 
-        public async Task<ActionResult<AuthDto>> Login(LoginDto loginDto)
+        public async Task<ActionResult<AuthDto>> LoginAsync(LoginDto loginDto)
         {
             AppUser? user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginDto.Email);
 
@@ -42,9 +42,9 @@ namespace NewsAPI.Repositories
             );
         }
 
-        public async Task<ActionResult<AuthDto>> Register(RegisterDto registerDto)
+        public async Task<ActionResult<AuthDto>> RegisterAsync(RegisterDto registerDto)
         {
-            if (await isUserExists(registerDto.Email))
+            if (await isUserExistsAsync(registerDto.Email))
             {
                 return new BadRequestObjectResult("User already exists");
             }

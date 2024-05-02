@@ -18,13 +18,13 @@ namespace NewsAPI.Controllers
         public async Task<ActionResult<AuthDto>> Register(RegisterDto registerDto)
         {
 
-            return await _authRepository.Register(registerDto);
+            return await _authRepository.RegisterAsync(registerDto);
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<AuthDto>> Login(LoginDto loginDto)
         {
-            return await _authRepository.Login(loginDto);
+            return await _authRepository.LoginAsync(loginDto);
         }
 
 

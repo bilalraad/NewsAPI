@@ -19,7 +19,7 @@ namespace NewsAPI.Repositories
             _mapper = mapper;
             _tokenService = tokenService;
         }
-        public async Task<ActionResult> AddUser(RegisterDto registerDto)
+        public async Task<ActionResult> AddUserAsync(RegisterDto registerDto)
         {
             AppUser user = _mapper.Map<AppUser>(registerDto);
             var (hash, salt) = _tokenService.GenerateHash(registerDto.Password);
@@ -31,7 +31,7 @@ namespace NewsAPI.Repositories
             return new OkResult();
         }
 
-        public async Task<ActionResult> DeleteUser(int id)
+        public async Task<ActionResult> DeleteUserAsync(Guid id)
         {
             AppUser? user = await _context.Users.FindAsync(id);
             if (user == null) return new NotFoundResult();
@@ -42,7 +42,7 @@ namespace NewsAPI.Repositories
 
         }
 
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsersAsync()
         {
             return await _context.Users
                     .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
@@ -50,7 +50,7 @@ namespace NewsAPI.Repositories
 
         }
 
-        public async Task<UserDto?> GetUserByEmail(string email)
+        public async Task<UserDto?> GetUserByEmailAsync(string email)
         {
             UserDto? user = await _context.Users
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
@@ -58,7 +58,7 @@ namespace NewsAPI.Repositories
             return user;
         }
 
-        public async Task<UserDto?> GetUserById(int id)
+        public async Task<UserDto?> GetUserByIdAsync(Guid id)
         {
             UserDto? user = await _context.Users
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
@@ -66,7 +66,7 @@ namespace NewsAPI.Repositories
             return user;
         }
 
-        public async Task<ActionResult> UpdateUser(int id, UpdateUserDto updateUserDto)
+        public async Task<ActionResult> UpdateUserAsync(Guid id, UpdateUserDto updateUserDto)
         {
 
             AppUser? oldUser = await _context.Users.FindAsync(id);

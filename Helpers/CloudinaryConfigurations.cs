@@ -1,6 +1,6 @@
 namespace NewsAPI.Helpers
 {
-    public class CloudinaryConfigurations
+    public class CloudinarySettings
     {
         public required string CloudName { get; set; }
         public required string ApiKey { get; set; }

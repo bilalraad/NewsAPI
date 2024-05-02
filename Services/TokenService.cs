@@ -23,8 +23,9 @@ namespace NewsAPI.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var claims = new Claim[]
                 {
-                    new Claim(JwtRegisteredClaimNames.NameId, user.Name),
+                    new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
+
 
                 };
             var tokenDescriptor = new SecurityTokenDescriptor

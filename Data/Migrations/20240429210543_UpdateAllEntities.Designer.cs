@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewsAPI;
 
@@ -10,9 +11,11 @@ using NewsAPI;
 namespace NewsAPI.Data.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240429210543_UpdateAllEntities")]
+    partial class UpdateAllEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -112,10 +115,6 @@ namespace NewsAPI.Data.Migrations
                     b.Property<bool>("IsPublished")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("PhotosUrls")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Tags")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -150,6 +149,9 @@ namespace NewsAPI.Data.Migrations
                     b.Property<bool>("IsMain")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid?>("NewsId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("PublicId")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -162,6 +164,8 @@ namespace NewsAPI.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NewsId");
 
                     b.ToTable("Photos");
                 });
@@ -185,9 +189,18 @@ namespace NewsAPI.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("NewsAPI.Entities.Photo", b =>
+                {
+                    b.HasOne("NewsAPI.Entities.News", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("NewsId");
+                });
+
             modelBuilder.Entity("NewsAPI.Entities.News", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

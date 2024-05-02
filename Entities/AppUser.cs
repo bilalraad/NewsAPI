@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using NewsAPI.Interfaces;
 
 namespace NewsAPI;
-[Table("users")]
-public class AppUser
+
+public class AppUser : BaseEntity
 {
-    public int Id { get; set; }
     public required string Name { get; set; }
     public required string Email { get; set; }
     public Gender Gender { get; set; }

@@ -19,37 +19,29 @@ public class UsersController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetAllAsync()
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
     {
-        return await _userRepository.GetAllUsers();
+        return await _userRepository.GetAllUsersAsync();
 
     }
 
     // GET: api/users/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<UserDto>> Get(int id)
+    public async Task<ActionResult<UserDto>> Get(Guid id)
     {
-        var user = await _userRepository.GetUserById(id);
+        var user = await _userRepository.GetUserByIdAsync(id);
         if (user == null) return NotFound();
         return user;
 
     }
 
-    // PutL api/users/{id}
-    [HttpPut("{id}")]
-    public async Task<ActionResult> Update(int id, UpdateUserDto updatedUserDto)
-    {
-        return await _userRepository.UpdateUser(id, updatedUserDto);
-    }
 
     [HttpPut]
     public async Task<ActionResult> UpdateProfile(UpdateUserDto updatedUserDto)
     {
-        var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-        if (userEmail == null) return NotFound();
-        UserDto? user = await _userRepository.GetUserByEmail(userEmail);
-        if (user == null) return NotFound();
-        return await _userRepository.UpdateUser(user.Id, updatedUserDto);
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null) return NotFound();
+        return await _userRepository.UpdateUserAsync(Guid.Parse(userId), updatedUserDto);
     }
 
 }

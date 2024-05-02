@@ -9,10 +9,10 @@ namespace NewsAPI.DTOs
         [Required]
         public required string Content { get; set; }
         [Required]
-        public required int AuthorId { get; set; }
-        public List<PhotoDto> Photos { get; set; } = new();
+        public required Guid AuthorId { get; set; }
+        [Required]
+        public List<PhotoDto>? Photos { get; set; }
         public List<string> Tags { get; set; } = new();
-
         public bool IsPublished { get; set; } = true;
 
     }

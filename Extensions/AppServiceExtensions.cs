@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using NewsAPI.Helpers;
 using NewsAPI.Interfaces;
 using NewsAPI.Repositories;
 using NewsAPI.Services;
@@ -52,11 +53,13 @@ namespace NewsAPI.Extensions
             //*: this is add to detect all controllers
             services.AddControllers();
             services.AddCors();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.Configure<CloudinarySettings>(configuration.GetSection("CloudinarySettings"));
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<INewsRepository, NewsRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddScoped<IUploadRepository, UploadRepository>();
 
             return services;
         }

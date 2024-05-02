@@ -5,9 +5,9 @@ namespace NewsAPI.Interfaces
 {
     public interface IAuthRepository
     {
-        Task<ActionResult<AuthDto>> Register(RegisterDto user);
-        Task<ActionResult<AuthDto>> Login(LoginDto user);
+        Task<ActionResult<AuthDto>> RegisterAsync(RegisterDto user);
+        Task<ActionResult<AuthDto>> LoginAsync(LoginDto user);
 
-        Task<bool> isUserExists(string email);
+        Task<bool> isUserExistsAsync(string email);
     }
 }

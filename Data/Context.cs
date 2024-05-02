@@ -9,4 +9,8 @@ public class Context : DbContext
 
     public DbSet<AppUser> Users { get; set; }
     public DbSet<News> News { get; set; }
+    public DbSet<Photo> Photos { get; set; }
+
+
+
 }

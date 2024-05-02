@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using NewsAPI.DTOs;
 using NewsAPI.Entities;
@@ -9,10 +10,13 @@ namespace NewsAPI.Helpers
 
         public AutoMapper()
         {
-            CreateMap<News, NewsDto>();
+            CreateMap<News, NewsDto>().ForMember(dest => dest.Photos, opt => opt.Ignore());
             CreateMap<Photo, PhotoDto>();
             CreateMap<Comment, CommentDto>();
-            CreateMap<CreateNewsDto, News>();
+            CreateMap<CreateNewsDto, News>()
+            .ForMember(dest => dest.PhotosUrls, opt => opt.MapFrom(
+                src => src.Photos!.ConvertAll(p => p.Url).ToList()
+            ));
             CreateMap<UpdateNewsDto, News>();
             CreateMap<AppUser, UserDto>();
             CreateMap<RegisterDto, AppUser>();
@@ -21,4 +25,5 @@ namespace NewsAPI.Helpers
 
 
     }
+
 }

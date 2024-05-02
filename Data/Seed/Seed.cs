@@ -57,10 +57,20 @@ namespace NewsAPI.Data
                         Title = newsObj.Title,
                         Content = newsObj.Content,
                         Tags = newsObj.Tags,
-                        AuthorId = newsObj.AuthorId,
+                        AuthorId = Guid.NewGuid(),
                     };
-                    news.Photos = newsObj.Photos.Select(p => new Photo { Url = p.Url, IsMain = p.IsMain, PublicId = p.PublicId, NewsId = news.Id, News = news }).ToList();
+                    news.PhotosUrls = newsObj.Photos?.ConvertAll(p => p.Url).ToList() ?? new();
+                    List<Photo> photos = newsObj.Photos?.ConvertAll(p => new Photo
+                    {
+                        Url = p.Url,
+                        Description = p.Description,
+                        IsMain = p.IsMain,
+                        PublicId = p.Url,
+
+                    }) ?? new();
                     await context.News.AddAsync(news);
+                    await context.Photos.AddRangeAsync(photos);
+
                 }
                 await context.SaveChangesAsync();
             }

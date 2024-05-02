@@ -6,12 +6,12 @@ namespace NewsAPI.Interfaces
     public interface IUserRepository
     {
 
-        Task<UserDto?> GetUserById(int id);
-        Task<UserDto?> GetUserByEmail(string email);
-        Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers();
-        Task<ActionResult> AddUser(RegisterDto user);
-        Task<ActionResult> UpdateUser(int id, UpdateUserDto user);
-        Task<ActionResult> DeleteUser(int id);
+        Task<UserDto?> GetUserByIdAsync(Guid id);
+        Task<UserDto?> GetUserByEmailAsync(string email);
+        Task<ActionResult<IEnumerable<UserDto>>> GetAllUsersAsync();
+        Task<ActionResult> AddUserAsync(RegisterDto user);
+        Task<ActionResult> UpdateUserAsync(Guid id, UpdateUserDto user);
+        Task<ActionResult> DeleteUserAsync(Guid id);
     }
 
 }
