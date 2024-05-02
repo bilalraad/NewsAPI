@@ -27,13 +27,14 @@ namespace NewsAPI.Controllers
         [HttpPost("list")]
         public async Task<ActionResult<IEnumerable<PhotoDto>>> UploadList(List<UploadDto> uploadDtos)
         {
-            return await _uploadRepository.UploadListAsync(uploadDtos);
+            return Ok(await _uploadRepository.UploadListAsync(uploadDtos));
         }
 
         [HttpDelete("{publicId}")]
         public async Task<ActionResult> Delete(string publicId)
         {
-            return await _uploadRepository.DeleteAsync(publicId);
+            await _uploadRepository.DeleteAsync(publicId);
+            return NoContent();
         }
 
 

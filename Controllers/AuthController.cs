@@ -15,16 +15,15 @@ namespace NewsAPI.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<AuthDto>> Register(RegisterDto registerDto)
+        public async Task<ActionResult<AuthDto>> RegisterAsync(RegisterDto registerDto)
         {
-
-            return await _authRepository.RegisterAsync(registerDto);
+            return Ok(await _authRepository.RegisterAsync(registerDto));
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<AuthDto>> Login(LoginDto loginDto)
         {
-            return await _authRepository.LoginAsync(loginDto);
+            return Ok(await _authRepository.LoginAsync(loginDto));
         }
 
 

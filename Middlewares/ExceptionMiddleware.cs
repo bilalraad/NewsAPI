@@ -23,6 +23,25 @@ namespace NewsAPI.Middlewares
             {
                 await _next(context);
             }
+            catch (AppException appEx)
+            {
+                var apiError = new ApiError
+                {
+                    StatusCode = appEx.StatusCode,
+                    Message = appEx.Message,
+                    Details = _environment.IsDevelopment() ? appEx.StackTrace?.ToString() : "Please Try Again Later"
+                };
+
+                // Set the response status code and content type
+                context.Response.StatusCode = apiError.StatusCode;
+                context.Response.ContentType = "application/json";
+
+                // Serialize the ApiError object to JSON
+                var json = JsonSerializer.Serialize(apiError);
+
+                // Write the JSON response to the client
+                await context.Response.WriteAsync(json);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An unhandled exception occurred.");

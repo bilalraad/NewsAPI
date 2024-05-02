@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewsAPI.DTOs;
 using NewsAPI.Entities;
+using NewsAPI.Errors;
 using NewsAPI.Interfaces;
 
 namespace NewsAPI.Repositories
@@ -22,26 +23,23 @@ namespace NewsAPI.Repositories
             _logger = logger;
         }
 
-        public async Task<ActionResult> AddNewsAsync(CreateNewsDto news)
+        public async Task AddNewsAsync(CreateNewsDto news)
         {
             News newNews = _mapper.Map<News>(news);
             await _context.News.AddAsync(newNews);
             await _context.SaveChangesAsync();
-            return new OkResult();
 
         }
 
-        public async Task<ActionResult> DeleteNewsAsync(Guid id)
+        public async Task DeleteNewsAsync(Guid id)
         {
             News? news = await _context.News.FindAsync(id);
-            if (news == null) return new NotFoundResult();
-
+            if (news == null) throw AppException.NotFound("News not found");
             _context.News.Remove(news);
             await _context.SaveChangesAsync();
-            return new NoContentResult();
         }
 
-        public async Task<ActionResult<IEnumerable<NewsDto>>> GetAllNewsAsync()
+        public async Task<IEnumerable<NewsDto>> GetAllNewsAsync()
         {
             List<NewsDto> newsDtos = new();
 
@@ -60,25 +58,26 @@ namespace NewsAPI.Repositories
 
         }
 
-        public async Task<ActionResult<NewsDto>> GetNewsByIdAsync(Guid id)
+        public async Task<NewsDto> GetNewsByIdAsync(Guid id)
         {
             NewsDto? news = await _context.News
                   .ProjectTo<NewsDto>(_mapper.ConfigurationProvider)
                   .FirstOrDefaultAsync(u => u.Id == id);
-            return news != null ? new OkObjectResult(news) : new NotFoundResult();
+            return news != null ? news : throw AppException.NotFound("News not found"); ;
         }
 
 
 
-        public async Task<ActionResult> UpdateNewsAsync(Guid id, UpdateNewsDto updateNewsDto)
+        public async Task UpdateNewsAsync(Guid id, UpdateNewsDto updateNewsDto)
         {
             News? oldNews = await _context.News.FindAsync(id);
-            if (oldNews == null) return new NotFoundResult();
+            if (oldNews == null) throw AppException.NotFound("News not found"); ;
             _mapper.Map(updateNewsDto, oldNews);
             await _context.SaveChangesAsync();
-            return new NoContentResult();
+
 
         }
+
 
         private async Task<List<PhotoDto>> GetPhotosAsync(List<string> photosUrls)
         {

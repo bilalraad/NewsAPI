@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewsAPI.DTOs;
+using NewsAPI.Errors;
 using NewsAPI.Interfaces;
 
 namespace NewsAPI.Repositories
@@ -13,36 +14,32 @@ namespace NewsAPI.Repositories
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
 
-        public UserRepository(Context context, IMapper mapper, ITokenService tokenService)
+        private readonly IAuthRepository _authRepository;
+
+        public UserRepository(Context context, IMapper mapper, ITokenService tokenService,
+            IAuthRepository authRepository)
         {
             _context = context;
             _mapper = mapper;
             _tokenService = tokenService;
+            _authRepository = authRepository;
         }
-        public async Task<ActionResult> AddUserAsync(RegisterDto registerDto)
+        public async Task AddUserAsync(RegisterDto registerDto)
         {
-            AppUser user = _mapper.Map<AppUser>(registerDto);
-            var (hash, salt) = _tokenService.GenerateHash(registerDto.Password);
-            user.PasswordHash = hash;
-            user.PasswordSalt = salt;
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-
-            return new OkResult();
+            await _authRepository.RegisterAsync(registerDto);
         }
 
-        public async Task<ActionResult> DeleteUserAsync(Guid id)
+        public async Task DeleteUserAsync(Guid id)
         {
             AppUser? user = await _context.Users.FindAsync(id);
-            if (user == null) return new NotFoundResult();
+            if (user == null) throw AppException.NotFound("User not found");
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
-            return new NoContentResult();
 
         }
 
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsersAsync()
+        public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
             return await _context.Users
                     .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
@@ -66,14 +63,14 @@ namespace NewsAPI.Repositories
             return user;
         }
 
-        public async Task<ActionResult> UpdateUserAsync(Guid id, UpdateUserDto updateUserDto)
+        public async Task UpdateUserAsync(Guid id, UpdateUserDto updateUserDto)
         {
 
             AppUser? oldUser = await _context.Users.FindAsync(id);
-            if (oldUser == null) return new NotFoundResult();
+            if (oldUser == null) throw AppException.NotFound("User not found");
             _mapper.Map(updateUserDto, oldUser);
             await _context.SaveChangesAsync();
-            return new NoContentResult();
+
         }
 
 

@@ -21,7 +21,7 @@ public class UsersController : BaseController
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
     {
-        return await _userRepository.GetAllUsersAsync();
+        return Ok(await _userRepository.GetAllUsersAsync());
 
     }
 
@@ -41,7 +41,8 @@ public class UsersController : BaseController
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userId == null) return NotFound();
-        return await _userRepository.UpdateUserAsync(Guid.Parse(userId), updatedUserDto);
+        await _userRepository.UpdateUserAsync(Guid.Parse(userId), updatedUserDto);
+        return NoContent();
     }
 
 }

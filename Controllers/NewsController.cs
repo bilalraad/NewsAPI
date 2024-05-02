@@ -19,7 +19,7 @@ namespace NewsAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<NewsDto>>> GetAll()
         {
-            return await _newsRepository.GetAllNewsAsync();
+            return Ok(await _newsRepository.GetAllNewsAsync());
         }
 
         [HttpGet("{id}")]
@@ -27,27 +27,30 @@ namespace NewsAPI.Controllers
         public async Task<ActionResult<NewsDto>> GetById(Guid id)
         {
 
-            return await _newsRepository.GetNewsByIdAsync(id);
+            return Ok(await _newsRepository.GetNewsByIdAsync(id));
         }
 
         [HttpPost]
         public async Task<ActionResult> Create(CreateNewsDto newsDto)
         {
 
-            return await _newsRepository.AddNewsAsync(newsDto);
+            await _newsRepository.AddNewsAsync(newsDto);
+            return NoContent();
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(Guid id, UpdateNewsDto updatedNewsDto)
         {
 
-            return await _newsRepository.UpdateNewsAsync(id, updatedNewsDto);
+            await _newsRepository.UpdateNewsAsync(id, updatedNewsDto);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            return await _newsRepository.DeleteNewsAsync(id);
+            await _newsRepository.DeleteNewsAsync(id);
+            return NoContent();
         }
     }
 }

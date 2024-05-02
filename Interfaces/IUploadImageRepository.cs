@@ -5,9 +5,9 @@ namespace NewsAPI.Interfaces
 {
     public interface IUploadRepository
     {
-        Task<ActionResult<PhotoDto>> UploadAsync(UploadDto uploadImageDto);
-        Task<ActionResult<IEnumerable<PhotoDto>>> UploadListAsync(List<UploadDto> uploadImagesDto);
-        Task<ActionResult> DeleteAsync(string publicId);
+        Task<PhotoDto> UploadAsync(UploadDto uploadImageDto);
+        Task<IEnumerable<PhotoDto>> UploadListAsync(List<UploadDto> uploadImagesDto);
+        Task DeleteAsync(string publicId);
 
     }
 }

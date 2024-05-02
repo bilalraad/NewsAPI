@@ -1,10 +1,10 @@
 using AutoMapper;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NewsAPI.DTOs;
 using NewsAPI.Entities;
+using NewsAPI.Errors;
 using NewsAPI.Helpers;
 using NewsAPI.Interfaces;
 
@@ -30,18 +30,17 @@ namespace NewsAPI.Repositories
             _mapper = mapper;
 
         }
-        public async Task<ActionResult> DeleteAsync(string publicId)
+        public async Task DeleteAsync(string publicId)
         {
             var deleteParams = new DeletionParams(publicId);
 
             var result = await _cloudinary.DestroyAsync(deleteParams);
 
-            if (result.Result == "ok") return new OkResult();
-
-            return new BadRequestResult();
+            if (result.Result == "ok") return;
+            throw AppException.BadRequest("failed to delete photo");
         }
 
-        public async Task<ActionResult<PhotoDto>> UploadAsync(UploadDto uploadImageDto)
+        public async Task<PhotoDto> UploadAsync(UploadDto uploadImageDto)
         {
 
             var uploadResult = await UploadFile(uploadImageDto.File);
@@ -60,9 +59,9 @@ namespace NewsAPI.Repositories
             return _mapper.Map<PhotoDto>(photo);
         }
 
-        public async Task<ActionResult<IEnumerable<PhotoDto>>> UploadListAsync(List<UploadDto> uploadImagesDto)
+        public async Task<IEnumerable<PhotoDto>> UploadListAsync(List<UploadDto> uploadImagesDto)
         {
-            if (uploadImagesDto.Count == 0) return new BadRequestResult();
+            if (uploadImagesDto.Count == 0) throw AppException.BadRequest("No files uploaded");
             List<PhotoDto> photos = [];
             foreach (var uploadImageDto in uploadImagesDto)
             {
@@ -78,8 +77,7 @@ namespace NewsAPI.Repositories
                 await _context.SaveChangesAsync();
                 photos.Add(_mapper.Map<PhotoDto>(photo));
             }
-
-            return new OkObjectResult(photos);
+            return photos;
 
         }
 
