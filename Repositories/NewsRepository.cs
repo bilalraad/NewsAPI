@@ -1,6 +1,5 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewsAPI.DTOs;
 using NewsAPI.Entities;
@@ -74,8 +73,6 @@ namespace NewsAPI.Repositories
             if (oldNews == null) throw AppException.NotFound("News not found"); ;
             _mapper.Map(updateNewsDto, oldNews);
             await _context.SaveChangesAsync();
-
-
         }
 
 

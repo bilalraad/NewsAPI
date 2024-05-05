@@ -30,9 +30,11 @@ namespace NewsAPI.Repositories
             _mapper = mapper;
 
         }
-        public async Task DeleteAsync(string publicId)
+        public async Task DeleteAsync(string url)
         {
-            var deleteParams = new DeletionParams(publicId);
+            var photo = _context.Photos.FirstOrDefault((p) => p.Url == url);
+            if (photo == null) throw AppException.NotFound("Photo not Found");
+            var deleteParams = new DeletionParams(photo.PublicId);
 
             var result = await _cloudinary.DestroyAsync(deleteParams);
 

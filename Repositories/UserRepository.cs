@@ -12,16 +12,14 @@ namespace NewsAPI.Repositories
     {
         private readonly Context _context;
         private readonly IMapper _mapper;
-        private readonly ITokenService _tokenService;
 
         private readonly IAuthRepository _authRepository;
 
-        public UserRepository(Context context, IMapper mapper, ITokenService tokenService,
+        public UserRepository(Context context, IMapper mapper,
             IAuthRepository authRepository)
         {
             _context = context;
             _mapper = mapper;
-            _tokenService = tokenService;
             _authRepository = authRepository;
         }
         public async Task AddUserAsync(RegisterDto registerDto)
@@ -52,6 +50,7 @@ namespace NewsAPI.Repositories
             UserDto? user = await _context.Users
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null) throw AppException.NotFound("User not found");
             return user;
         }
 
@@ -60,6 +59,8 @@ namespace NewsAPI.Repositories
             UserDto? user = await _context.Users
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null) throw AppException.NotFound("User not found");
+
             return user;
         }
 

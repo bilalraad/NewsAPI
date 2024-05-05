@@ -18,11 +18,11 @@ namespace NewsAPI.Controllers
             _uploadRepository = uploadRepository;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<PhotoDto>> UploadFile(UploadDto uploadDto)
-        {
-            return await _uploadRepository.UploadAsync(uploadDto);
-        }
+        // [HttpPost]
+        // public async Task<ActionResult<PhotoDto>> UploadFile(UploadDto uploadDto)
+        // {
+        //     return await _uploadRepository.UploadAsync(uploadDto);
+        // }
 
         [HttpPost("list")]
         public async Task<ActionResult<IEnumerable<PhotoDto>>> UploadList(List<UploadDto> uploadDtos)
@@ -30,10 +30,10 @@ namespace NewsAPI.Controllers
             return Ok(await _uploadRepository.UploadListAsync(uploadDtos));
         }
 
-        [HttpDelete("{publicId}")]
-        public async Task<ActionResult> Delete(string publicId)
+        [HttpDelete("{url}")]
+        public async Task<ActionResult> DeleteAsync(string url)
         {
-            await _uploadRepository.DeleteAsync(publicId);
+            await _uploadRepository.DeleteAsync(url);
             return NoContent();
         }
 

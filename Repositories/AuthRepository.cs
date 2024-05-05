@@ -1,5 +1,4 @@
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewsAPI.DTOs;
 using NewsAPI.Errors;
