@@ -1,6 +1,8 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using NewsAPI.DTOs;
 using NewsAPI.Entities;
@@ -17,8 +19,10 @@ namespace NewsAPI.Repositories
         private readonly Context _context;
         private readonly IMapper _mapper;
 
+        private readonly ILogger<UploadRepository> _logger;
 
-        public UploadRepository(IOptions<CloudinarySettings> cloudinarySettings, Context context, IMapper mapper)
+
+        public UploadRepository(IOptions<CloudinarySettings> cloudinarySettings, Context context, IMapper mapper, ILogger<UploadRepository> logger)
         {
             Account account = new Account(
                 cloudinarySettings.Value.CloudName,
@@ -28,6 +32,7 @@ namespace NewsAPI.Repositories
             _cloudinary = new Cloudinary(account);
             _context = context;
             _mapper = mapper;
+            _logger = logger;
 
         }
         public async Task DeleteAsync(string url)
@@ -40,6 +45,16 @@ namespace NewsAPI.Repositories
 
             if (result.Result == "ok") return;
             throw AppException.BadRequest("failed to delete photo");
+        }
+
+        public async Task<List<PhotoDto>> GetPhotosByUrls(List<string> urls)
+        {
+            var photos = await _context.Photos
+                            .Where(p => urls.Contains(p.Url))
+                            .ProjectTo<PhotoDto>(_mapper.ConfigurationProvider)
+                            .ToListAsync();
+
+            return photos;
         }
 
         public async Task<PhotoDto> UploadAsync(UploadDto uploadImageDto)

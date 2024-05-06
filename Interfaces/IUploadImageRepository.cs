@@ -7,6 +7,9 @@ namespace NewsAPI.Interfaces
     {
         Task<PhotoDto> UploadAsync(UploadDto uploadImageDto);
         Task<IEnumerable<PhotoDto>> UploadListAsync(List<UploadDto> uploadImagesDto);
+
+        Task<List<PhotoDto>> GetPhotosByUrls(List<string> urls);
+
         Task DeleteAsync(string url);
 
     }

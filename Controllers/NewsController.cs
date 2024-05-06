@@ -17,9 +17,9 @@ namespace NewsAPI.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<NewsDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<NewsDto>>> GetAll([FromQuery] PagingDto pagingDto)
         {
-            return Ok(await _newsRepository.GetAllNewsAsync());
+            return Ok(await _newsRepository.GetAllNewsAsync(pagingDto));
         }
 
         [HttpGet("{id}")]
@@ -46,6 +46,9 @@ namespace NewsAPI.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes a specific News.
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {

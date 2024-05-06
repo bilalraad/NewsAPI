@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using NewsAPI.DTOs;
+using NewsAPI.Helpers;
 
 namespace NewsAPI.Interfaces
 {
@@ -8,7 +9,7 @@ namespace NewsAPI.Interfaces
 
         Task<UserDto?> GetUserByIdAsync(Guid id);
         Task<UserDto?> GetUserByEmailAsync(string email);
-        Task<IEnumerable<UserDto>> GetAllUsersAsync();
+        Task<PaginatedList<UserDto>> GetAllUsersAsync(PagingDto pagingDto);
         Task AddUserAsync(RegisterDto user);
         Task UpdateUserAsync(Guid id, UpdateUserDto user);
         Task DeleteUserAsync(Guid id);

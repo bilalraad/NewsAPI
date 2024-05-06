@@ -1,3 +1,4 @@
+using NewsAPI.DTOs;
 using NewsAPI.Interfaces;
 
 namespace NewsAPI.Entities
@@ -13,7 +14,7 @@ namespace NewsAPI.Entities
 
         public List<Comment> Comments { get; set; } = new();
 
-        public bool IsPublished { get; set; } = false;
+        public bool IsPublished { get; set; } = true;
 
 
     }

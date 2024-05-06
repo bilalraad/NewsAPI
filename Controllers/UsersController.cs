@@ -19,9 +19,9 @@ public class UsersController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetAll([FromQuery] PagingDto pagingDto)
     {
-        return Ok(await _userRepository.GetAllUsersAsync());
+        return Ok(await _userRepository.GetAllUsersAsync(pagingDto));
 
     }
 

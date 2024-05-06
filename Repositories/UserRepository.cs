@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewsAPI.DTOs;
 using NewsAPI.Errors;
+using NewsAPI.Helpers;
 using NewsAPI.Interfaces;
+using NewsAPI.Middlewares;
 
 namespace NewsAPI.Repositories
 {
@@ -37,11 +39,11 @@ namespace NewsAPI.Repositories
 
         }
 
-        public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
+        public async Task<PaginatedList<UserDto>> GetAllUsersAsync(PagingDto pagingDto)
         {
             return await _context.Users
                     .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
+                    .PaginateAsync(pagingDto);
 
         }
 

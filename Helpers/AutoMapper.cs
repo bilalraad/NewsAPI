@@ -1,4 +1,3 @@
-using System.Text.Json;
 using AutoMapper;
 using NewsAPI.DTOs;
 using NewsAPI.Entities;
@@ -21,6 +20,7 @@ namespace NewsAPI.Helpers
             CreateMap<AppUser, UserDto>();
             CreateMap<RegisterDto, AppUser>();
             CreateMap<UpdateUserDto, AppUser>();
+
         }
 
 

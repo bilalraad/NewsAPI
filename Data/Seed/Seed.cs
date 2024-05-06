@@ -58,6 +58,7 @@ namespace NewsAPI.Data
                         Content = newsObj.Content,
                         Tags = newsObj.Tags,
                         AuthorId = Guid.NewGuid(),
+                        IsPublished = true
                     };
                     news.PhotosUrls = newsObj.Photos?.ConvertAll(p => p.Url).ToList() ?? new();
                     List<Photo> photos = newsObj.Photos?.ConvertAll(p => new Photo
