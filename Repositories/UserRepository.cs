@@ -43,6 +43,7 @@ namespace NewsAPI.Repositories
         {
             return await _context.Users
                     .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+                    .AsNoTracking()
                     .PaginateAsync(pagingDto);
 
         }

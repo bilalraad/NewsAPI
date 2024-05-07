@@ -1,11 +1,11 @@
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NewsAPI.Helpers;
 using NewsAPI.Interfaces;
 using NewsAPI.Repositories;
 using NewsAPI.Services;
-using Swashbuckle.AspNetCore.Filters;
 
 namespace NewsAPI.Extensions
 {
@@ -18,32 +18,37 @@ namespace NewsAPI.Extensions
         {
             opt.SwaggerDoc("v1", new OpenApiInfo { Title = "NewsApi", Version = "v1" });
 
-            // opt.AddSecurityDefinition(
-            //     "",
-            //     new OpenApiSecurityScheme
-            //     {
-            //         Flows = new OpenApiOAuthFlows
-            //         {
-            //             Password = new OpenApiOAuthFlow
-            //             {
-            //                 TokenUrl = new Uri("/api/auth/login", UriKind.Relative),
-            //                 Scopes = new Dictionary<string, string>
-            //                 {
-            //                     { "api", "Access the API" }
-            //                 }
+            // Include 'SecurityScheme' to use JWT Authentication
+            var jwtSecurityScheme = new OpenApiSecurityScheme
+            {
+                BearerFormat = "JWT",
+                Name = "JWT Authentication",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
+                Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
 
-            //             }
-            //         }
+                Reference = new OpenApiReference
+                {
+                    Id = JwtBearerDefaults.AuthenticationScheme,
+                    Type = ReferenceType.SecurityScheme
+                }
+            };
 
-            //     }
+            opt.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
 
-            // );
+            opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                { jwtSecurityScheme, Array.Empty<string>() }
+            }
+            );
 
-            opt.OperationFilter<SecurityRequirementsOperationFilter>();
+
             // using System.Reflection;
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             opt.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
+
             //*: this is add to init the database
             services.AddDbContext<Context>(options =>
             {

@@ -16,7 +16,7 @@ namespace NewsAPI.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        // [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<NewsDto>>> GetAll([FromQuery] PagingDto pagingDto)
         {
             return Ok(await _newsRepository.GetAllNewsAsync(pagingDto));

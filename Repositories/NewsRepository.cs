@@ -47,6 +47,7 @@ public class NewsRepository : INewsRepository
         var news = await _context.News
         .Where(n => n.DeletedAt == null || DateTime.Compare(DateTime.Now, n.DeletedAt.Value) < 0)
         .Where(n => n.IsPublished)
+        .AsNoTracking()
         .PaginateAsync(pagingDto);
 
         var newsDtos = _mapper.MapPaginatedList<News, NewsDto>(news);
