@@ -3,6 +3,7 @@ using System.Reflection;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NewsAPI.DTOs;
+using NewsAPI.Errors;
 using NewsAPI.Helpers;
 
 namespace NewsAPI.Middlewares
@@ -41,7 +42,8 @@ namespace NewsAPI.Middlewares
 
             if (propertyInfo == null)
             {
-                throw new ArgumentException($"Property '{propertyName}' not found on type '{entityType.Name}'.");
+                throw AppException.NotFound($"Property '{propertyName}' not found on type '{entityType.Name}'.");
+                // throw new ArgumentException($"Property '{propertyName}' not found on type '{entityType.Name}'.");
             }
 
             var parameter = Expression.Parameter(entityType, "x");

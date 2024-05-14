@@ -5,7 +5,6 @@ namespace NewsAPI.DTOs;
 
 public class NewsFilter : PagingDto
 {
-
     public string? Search { get; set; }
     public List<string>? Tags { get; set; }
 
