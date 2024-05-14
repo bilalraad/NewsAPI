@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+using System.Reflection;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NewsAPI.DTOs;
@@ -30,6 +32,26 @@ namespace NewsAPI.Middlewares
                 Count = list.Count,
                 Data = data
             };
+        }
+
+        public static IOrderedQueryable<T> OrderByDynamic<T>(this IQueryable<T> query, string propertyName, bool isDescending = false)
+        {
+            var entityType = typeof(T);
+            var propertyInfo = entityType.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+            if (propertyInfo == null)
+            {
+                throw new ArgumentException($"Property '{propertyName}' not found on type '{entityType.Name}'.");
+            }
+
+            var parameter = Expression.Parameter(entityType, "x");
+            var property = Expression.Property(parameter, propertyInfo);
+            var lambda = Expression.Lambda(property, parameter);
+
+            var methodName = isDescending ? "OrderByDescending" : "OrderBy";
+            var resultExpression = Expression.Call(typeof(Queryable), methodName, new[] { typeof(T), propertyInfo.PropertyType }, query.Expression, Expression.Quote(lambda));
+
+            return (IOrderedQueryable<T>)query.Provider.CreateQuery<T>(resultExpression);
         }
 
     }

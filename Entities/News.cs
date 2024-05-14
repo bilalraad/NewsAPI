@@ -7,6 +7,7 @@ namespace NewsAPI.Entities
     {
         public required string Title { get; set; }
         public required string Content { get; set; }
+        public int ViewCount { get; set; } = 0;
         public required Guid AuthorId { get; set; }
         public List<string> PhotosUrls { get; set; } = new();
 
@@ -15,6 +16,7 @@ namespace NewsAPI.Entities
         public List<Comment> Comments { get; set; } = new();
 
         public bool IsPublished { get; set; } = true;
+
 
 
     }

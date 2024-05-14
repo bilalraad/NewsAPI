@@ -8,7 +8,7 @@ namespace NewsAPI.Interfaces
     public interface INewsRepository
     {
         Task<NewsDto> GetNewsByIdAsync(Guid id);
-        Task<PaginatedList<NewsDto>> GetAllNewsAsync(PagingDto pagingDto);
+        Task<PaginatedList<NewsDto>> GetAllNewsAsync(NewsFilter pagingDto);
         Task AddNewsAsync(CreateNewsDto news);
         Task UpdateNewsAsync(Guid id, UpdateNewsDto news);
         Task DeleteNewsAsync(Guid id);

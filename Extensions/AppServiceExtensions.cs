@@ -17,6 +17,7 @@ namespace NewsAPI.Extensions
             services.AddSwaggerGen(opt =>
         {
             opt.SwaggerDoc("v1", new OpenApiInfo { Title = "NewsApi", Version = "v1" });
+            opt.UseInlineDefinitionsForEnums();
 
             // Include 'SecurityScheme' to use JWT Authentication
             var jwtSecurityScheme = new OpenApiSecurityScheme
@@ -65,7 +66,7 @@ namespace NewsAPI.Extensions
             services.AddScoped<INewsRepository, NewsRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IUploadRepository, UploadRepository>();
-            // services.AddScoped<PhotoResolver>();
+            services.AddScoped<UpdateNewsViewCount>();
 
             return services;
         }

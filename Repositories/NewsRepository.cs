@@ -41,14 +41,27 @@ public class NewsRepository : INewsRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<PaginatedList<NewsDto>> GetAllNewsAsync(PagingDto pagingDto)
+    public async Task<PaginatedList<NewsDto>> GetAllNewsAsync(NewsFilter newsFilter)
     {
-
-        var news = await _context.News
+        var query = _context.News
         .Where(n => n.DeletedAt == null || DateTime.Compare(DateTime.Now, n.DeletedAt.Value) < 0)
-        .Where(n => n.IsPublished)
-        .AsNoTracking()
-        .PaginateAsync(pagingDto);
+        .Where(n => n.IsPublished);
+
+        if (!string.IsNullOrEmpty(newsFilter.Search))
+        {
+            query = query.Where(n => n.Title.ToLower().Contains(newsFilter.Search) || n.Content.ToLower().Contains(newsFilter.Search));
+        }
+
+        if (newsFilter.Tags != null && newsFilter.Tags.Count > 0)
+        {
+            query = query.Where(n => n.Tags.Any(t => newsFilter.Tags.Contains(t)));
+        }
+
+
+        query = query.OrderByDynamic(newsFilter.Sorting.OrderBy.ToString(), newsFilter.Sorting.IsDescending);
+
+
+        var news = await query.AsNoTracking().PaginateAsync(newsFilter);
 
         var newsDtos = _mapper.MapPaginatedList<News, NewsDto>(news);
 
@@ -78,7 +91,11 @@ public class NewsRepository : INewsRepository
         _mapper.Map(updateNewsDto, oldNews);
         await _context.SaveChangesAsync();
     }
-
-
-
 }
+
+// TODO: ADD THE NUMBER OF VIEWS
+// TODO: ADD THE NUMBER OF LIKES
+// TODO: ADD FAVORITES
+// TODO: ADD TAGS TABLE
+// TODO: ADD UPLOAD PHOTOS VALIDATION (ONLY ONE MAIN PHOTO)
+

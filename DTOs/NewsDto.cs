@@ -9,6 +9,7 @@ namespace NewsAPI.DTOs
         public required List<PhotoDto> Photos { get; set; } = new();
         public required List<string> Tags { get; set; }
         public required List<CommentDto> Comments { get; set; }
+        public required int ViewCount { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

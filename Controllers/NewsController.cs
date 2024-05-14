@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAPI.DTOs;
+using NewsAPI.Helpers;
 using NewsAPI.Interfaces;
 
 namespace NewsAPI.Controllers
@@ -16,14 +17,15 @@ namespace NewsAPI.Controllers
         }
 
         [HttpGet]
-        // [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<NewsDto>>> GetAll([FromQuery] PagingDto pagingDto)
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<NewsDto>>> GetAll([FromQuery] NewsFilter newsFilter)
         {
-            return Ok(await _newsRepository.GetAllNewsAsync(pagingDto));
+            return Ok(await _newsRepository.GetAllNewsAsync(newsFilter));
         }
 
         [HttpGet("{id}")]
         [AllowAnonymous]
+        [ServiceFilter(typeof(UpdateNewsViewCount))]
         public async Task<ActionResult<NewsDto>> GetById(Guid id)
         {
 

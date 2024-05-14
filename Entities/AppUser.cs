@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using NewsAPI.Interfaces;
 
 namespace NewsAPI;
@@ -13,7 +12,9 @@ public class AppUser : BaseEntity
     public required byte[] PasswordSalt { get; set; }
 
 }
-[JsonConverter(typeof(JsonStringEnumConverter)),]
+
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum Gender
 {
     Male,
