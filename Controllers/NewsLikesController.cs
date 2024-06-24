@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAPI.DTOs;
 using NewsAPI.Entities;
+using NewsAPI.Extensions;
 using NewsAPI.Helpers;
 using NewsAPI.Interfaces;
 
@@ -23,16 +24,14 @@ namespace NewsAPI.Controllers
         [HttpPost("Like/{newsId}")]
         public async Task<ActionResult> AddToLikedNews(Guid newsId)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            await _likesRepository.AddToLikedNews(Guid.Parse(userId!), newsId);
+            await _likesRepository.AddToLikedNews(User.GetUserId(), newsId);
             return NoContent();
         }
 
         [HttpPost("Unlike/{newsId}")]
         public async Task<ActionResult> RemoveFromLikedNews(Guid newsId)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            await _likesRepository.RemoveFromLikedNews(Guid.Parse(userId!), newsId);
+            await _likesRepository.RemoveFromLikedNews(User.GetUserId(), newsId);
             return NoContent();
         }
 

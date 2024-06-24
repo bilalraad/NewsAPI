@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAPI.Controllers;
 using NewsAPI.DTOs;
+using NewsAPI.Extensions;
 using NewsAPI.Interfaces;
 
 namespace NewsAPI;
@@ -39,9 +40,7 @@ public class UsersController : BaseController
     [HttpPut]
     public async Task<ActionResult> UpdateProfile(UpdateUserDto updatedUserDto)
     {
-        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userId == null) return NotFound();
-        await _userRepository.UpdateUserAsync(Guid.Parse(userId), updatedUserDto);
+        await _userRepository.UpdateUserAsync(User.GetUserId(), updatedUserDto);
         return NoContent();
     }
 
