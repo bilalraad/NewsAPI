@@ -17,7 +17,9 @@ namespace NewsAPI.Entities
 
         public bool IsPublished { get; set; } = true;
 
+        public List<NewsLike> LikedByUsers { get; set; } = [];
 
+        public int LikedByUsersCount { get; set; } = 0;
 
     }
 }

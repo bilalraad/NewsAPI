@@ -67,6 +67,7 @@ namespace NewsAPI.Extensions
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IUploadRepository, UploadRepository>();
             services.AddScoped<UpdateNewsViewCount>();
+            services.AddScoped<ILikesRepository, LikesRepository>();
 
             return services;
         }

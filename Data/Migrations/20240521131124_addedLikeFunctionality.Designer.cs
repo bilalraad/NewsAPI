@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewsAPI;
 
@@ -10,9 +11,11 @@ using NewsAPI;
 namespace NewsAPI.Data.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240521131124_addedLikeFunctionality")]
+    partial class addedLikeFunctionality
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -110,9 +113,6 @@ namespace NewsAPI.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsPublished")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("LikedByUsersCount")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PhotosUrls")

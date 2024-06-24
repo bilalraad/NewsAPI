@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using NewsAPI.DTOs;
-using NewsAPI.Interfaces;
 
 namespace NewsAPI.Helpers
 {

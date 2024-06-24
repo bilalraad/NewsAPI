@@ -4,7 +4,6 @@ using NewsAPI.Interfaces;
 
 namespace NewsAPI.Controllers
 {
-    [Route("[controller]")]
     public class UploadController : BaseController
     {
         private readonly ILogger<UploadController> _logger;
