@@ -2,32 +2,34 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using NewsAPI.Interfaces;
 
 namespace NewsAPI.Services
 {
-    public class TokenService : ITokenService
+    public class TokenService(IConfiguration configuration, UserManager<AppUser> userManager) : ITokenService
     {
         // Symmetric means a key that's only dependent on secret key
         // no public keys need to be sent/used
-        private readonly SymmetricSecurityKey _key;
+        private readonly SymmetricSecurityKey _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["secretKey"] ?? "YouShouldChangeThis"));
 
-        public TokenService(IConfiguration configuration)
-        {
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["secretKey"] ?? "YouShouldChangeThis"));
-        }
 
-        public string CreateToken(AppUser user)
+        public async Task<string> CreateToken(AppUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var claims = new Claim[]
+            var claims = new List<Claim>
                 {
                     new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email!),
 
 
                 };
+
+            var userRoles = await userManager.GetRolesAsync(user);
+            claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+
             var tokenDescriptor = new SecurityTokenDescriptor
 
             {

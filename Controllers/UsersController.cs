@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAPI.Controllers;
 using NewsAPI.DTOs;
+using NewsAPI.Entities;
 using NewsAPI.Extensions;
 using NewsAPI.Interfaces;
 
@@ -20,6 +21,7 @@ public class UsersController : BaseController
     }
 
     [HttpGet]
+    [Authorize(policy: AppPolicy.RequireAdminRole)]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAll([FromQuery] PagingDto pagingDto)
     {
         return Ok(await _userRepository.GetAllUsersAsync(pagingDto));

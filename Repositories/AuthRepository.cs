@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NewsAPI.DTOs;
 using NewsAPI.Errors;
@@ -8,36 +9,34 @@ namespace NewsAPI.Repositories
 {
     public class AuthRepository : IAuthRepository
     {
-        private readonly Context _context;
+        private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
 
-        public AuthRepository(Context context, ITokenService tokenService, IMapper mapper)
+        public AuthRepository(UserManager<AppUser> userManager, ITokenService tokenService, IMapper mapper)
         {
-            _context = context;
+            _userManager = userManager;
             _tokenService = tokenService;
             _mapper = mapper;
         }
 
         public async Task<bool> isUserExistsAsync(string email)
         {
-            return await _context.Users.AnyAsync(u => u.Email == email);
+            return await _userManager.Users.AnyAsync(u => u.NormalizedEmail == email.ToUpper());
         }
 
         public async Task<AuthDto> LoginAsync(LoginDto loginDto)
         {
-            AppUser? user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginDto.Email);
+            AppUser? user = await _userManager.Users.FirstOrDefaultAsync(u => u.NormalizedEmail == loginDto.Email.ToUpper());
 
             if (user == null) throw AppException.NotFound("User not found");
-            var (computedHash, _) = _tokenService.GenerateHash(loginDto.Password, user.PasswordSalt);
 
-            if (!computedHash.SequenceEqual(user.PasswordHash)) throw AppException.BadRequest("Invalid password");
 
             return
                 new AuthDto()
                 {
                     User = _mapper.Map<UserDto>(user),
-                    Token = _tokenService.CreateToken(user),
+                    Token = await _tokenService.CreateToken(user),
                 };
 
         }
@@ -49,23 +48,25 @@ namespace NewsAPI.Repositories
                 throw AppException.NotFound("User already exists");
             }
 
-            var (hash, salt) = _tokenService.GenerateHash(registerDto.Password);
             AppUser user = new AppUser
             {
                 Name = registerDto.Name,
                 Email = registerDto.Email,
-                PasswordHash = hash,
-                PasswordSalt = salt,
+                UserName = registerDto.Email,
             };
 
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            var results = await _userManager.CreateAsync(user, registerDto.Password);
+
+            if (!results.Succeeded)
+            {
+                throw AppException.BadRequest(results.Errors.FirstOrDefault()?.Description ?? "Unknown error");
+            }
 
             return
                 new AuthDto()
                 {
                     User = _mapper.Map<UserDto>(user),
-                    Token = _tokenService.CreateToken(user),
+                    Token = await _tokenService.CreateToken(user),
                 };
         }
     }

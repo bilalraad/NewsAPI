@@ -1,13 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using NewsAPI.Entities;
 
 namespace NewsAPI;
 
-public class Context : DbContext
+public class Context(DbContextOptions options) : IdentityDbContext<AppUser, AppRole, Guid,
+                IdentityUserClaim<Guid>, AppUserRole,
+                IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>,
+                IdentityUserToken<Guid>>(options)
 {
-    public Context(DbContextOptions options) : base(options) { }
 
-    public DbSet<AppUser> Users { get; set; }
     public DbSet<News> News { get; set; }
     public DbSet<Photo> Photos { get; set; }
 
@@ -19,6 +22,18 @@ public class Context : DbContext
 
         modelBuilder.Entity<NewsLike>()
             .HasKey(nl => new { nl.SourceUserId, nl.TargetNewsId });
+
+        modelBuilder.Entity<AppUser>()
+            .HasMany(nl => nl.UserRoles)
+            .WithOne(u => u.User)
+            .HasForeignKey(nl => nl.UserId)
+            .IsRequired();
+
+        modelBuilder.Entity<AppRole>()
+            .HasMany(nl => nl.UserRoles)
+            .WithOne(n => n.Role)
+            .HasForeignKey(nl => nl.RoleId)
+            .IsRequired();
 
         modelBuilder.Entity<NewsLike>()
             .HasOne(nl => nl.SourceUser)

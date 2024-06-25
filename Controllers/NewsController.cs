@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAPI.DTOs;
+using NewsAPI.Entities;
+using NewsAPI.Extensions;
 using NewsAPI.Helpers;
 using NewsAPI.Interfaces;
 
@@ -33,6 +35,7 @@ namespace NewsAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(policy: AppPolicy.RequireModeratorRole)]
         public async Task<ActionResult> Create(CreateNewsDto newsDto)
         {
 
@@ -41,6 +44,7 @@ namespace NewsAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(policy: AppPolicy.RequireModeratorRole)]
         public async Task<ActionResult> Update(Guid id, UpdateNewsDto updatedNewsDto)
         {
 
@@ -52,6 +56,7 @@ namespace NewsAPI.Controllers
         /// Deletes a specific News.
         /// </summary>
         [HttpDelete("{id}")]
+        [Authorize(policy: AppPolicy.RequireAdminRole)]
         public async Task<ActionResult> Delete(Guid id)
         {
             await _newsRepository.DeleteNewsAsync(id);

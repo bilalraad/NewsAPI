@@ -1,6 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using NewsAPI;
 using NewsAPI.Data;
+using NewsAPI.Entities;
 using NewsAPI.Extensions;
 using NewsAPI.Middlewares;
 
@@ -38,9 +39,11 @@ var services = scope.ServiceProvider;
 
 try
 {
-    var context = services.GetRequiredService<Context>();
+    var context = services.GetRequiredService<NewsAPI.Context>();
+    var userManager = services.GetRequiredService<UserManager<NewsAPI.AppUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
     await context.Database.MigrateAsync();
-    await Seed.UsersSeed(context);
+    await Seed.UsersSeed(userManager, roleManager);
     await Seed.NewsSeed(context);
 }
 catch (Exception ex)
