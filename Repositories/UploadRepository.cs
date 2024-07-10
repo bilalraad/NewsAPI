@@ -71,7 +71,7 @@ namespace NewsAPI.Repositories
             };
 
             await _context.Photos.AddAsync(photo);
-            await _context.SaveChangesAsync();
+
 
             return _mapper.Map<PhotoDto>(photo);
         }
@@ -80,6 +80,8 @@ namespace NewsAPI.Repositories
         {
             if (uploadImagesDto.Count == 0) throw AppException.BadRequest("No files uploaded");
             List<PhotoDto> photos = [];
+            if (uploadImagesDto.Count == 0) throw AppException.BadRequest("No files uploaded");
+            if (uploadImagesDto.Count(i => i.IsMain) > 1) throw AppException.BadRequest("Only one main image is allowed");
             foreach (var uploadImageDto in uploadImagesDto)
             {
                 var uploadResult = UploadFile(uploadImageDto.File).Result;
@@ -91,7 +93,7 @@ namespace NewsAPI.Repositories
                     IsMain = uploadImageDto.IsMain,
                 };
                 await _context.Photos.AddAsync(photo);
-                await _context.SaveChangesAsync();
+
                 photos.Add(_mapper.Map<PhotoDto>(photo));
             }
             return photos;

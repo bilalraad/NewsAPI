@@ -1,60 +1,53 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAPI.DTOs;
-using NewsAPI.Entities;
 using NewsAPI.Extensions;
 using NewsAPI.Helpers;
 using NewsAPI.Interfaces;
 
 
-namespace NewsAPI.Controllers
+namespace NewsAPI.Controllers;
+
+[Authorize]
+public class NewsLikesController(IUnitOfWork _unitOfWork) : BaseController
 {
-    [Authorize]
-    public class NewsLikesController : BaseController
+
+
+    [HttpPost("Like/{newsId}")]
+    public async Task<ActionResult> AddToLikedNews(Guid newsId)
+    {
+        await _unitOfWork.LikesRepository.AddToLikedNews(User.GetUserId(), newsId);
+        await _unitOfWork.Complete();
+        return NoContent();
+    }
+
+    [HttpPost("Unlike/{newsId}")]
+    public async Task<ActionResult> RemoveFromLikedNews(Guid newsId)
+    {
+        await _unitOfWork.LikesRepository.RemoveFromLikedNews(User.GetUserId(), newsId);
+        await _unitOfWork.Complete();
+        return NoContent();
+    }
+
+    [HttpGet("{newsId}")]
+    public async Task<ActionResult<PaginatedList<UserDto>>> GetNewsLikesAsync(Guid newsId, [FromQuery] PagingDto pagingDto)
     {
 
-        private readonly ILikesRepository _likesRepository;
-
-        public NewsLikesController(ILikesRepository likesRepository)
-        {
-            _likesRepository = likesRepository;
-        }
-
-        [HttpPost("Like/{newsId}")]
-        public async Task<ActionResult> AddToLikedNews(Guid newsId)
-        {
-            await _likesRepository.AddToLikedNews(User.GetUserId(), newsId);
-            return NoContent();
-        }
-
-        [HttpPost("Unlike/{newsId}")]
-        public async Task<ActionResult> RemoveFromLikedNews(Guid newsId)
-        {
-            await _likesRepository.RemoveFromLikedNews(User.GetUserId(), newsId);
-            return NoContent();
-        }
-
-        [HttpGet("{newsId}")]
-        public async Task<ActionResult<PaginatedList<UserDto>>> GetNewsLikesAsync(Guid newsId, [FromQuery] PagingDto pagingDto)
-        {
-
-            return await _likesRepository.GetNewsLikesAsync(newsId, pagingDto);
-
-        }
-        [HttpGet("Count/{newsId}")]
-        public async Task<ActionResult<int>> GetNewsLikeCountAsync(Guid newsId)
-        {
-
-            return await _likesRepository.GetNewsLikeCountAsync(newsId);
-        }
-
-        [HttpGet("UserLikes/{userId}")]
-        public async Task<ActionResult<PaginatedList<NewsDto>>> GetLikedNews(Guid userId, [FromQuery] PagingDto pagingDto)
-        {
-            return await _likesRepository.GetLikedNews(userId, pagingDto);
-        }
-
+        return await _unitOfWork.LikesRepository.GetNewsLikesAsync(newsId, pagingDto);
 
     }
+    [HttpGet("Count/{newsId}")]
+    public async Task<ActionResult<int>> GetNewsLikeCountAsync(Guid newsId)
+    {
+
+        return await _unitOfWork.LikesRepository.GetNewsLikeCountAsync(newsId);
+    }
+
+    [HttpGet("UserLikes/{userId}")]
+    public async Task<ActionResult<PaginatedList<NewsDto>>> GetLikedNews(Guid userId, [FromQuery] PagingDto pagingDto)
+    {
+        return await _unitOfWork.LikesRepository.GetLikedNews(userId, pagingDto);
+    }
+
+
 }

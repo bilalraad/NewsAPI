@@ -11,20 +11,15 @@ namespace NewsAPI;
 
 
 [Authorize]
-public class UsersController : BaseController
+public class UsersController(IUnitOfWork _unitOfWork) : BaseController
 {
-    private readonly IUserRepository _userRepository;
 
-    public UsersController(IUserRepository userRepository)
-    {
-        _userRepository = userRepository;
-    }
 
     [HttpGet]
     [Authorize(policy: AppPolicy.RequireAdminRole)]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAll([FromQuery] PagingDto pagingDto)
     {
-        return Ok(await _userRepository.GetAllUsersAsync(pagingDto));
+        return Ok(await _unitOfWork.UserRepository.GetAllUsersAsync(pagingDto));
 
     }
 
@@ -32,7 +27,7 @@ public class UsersController : BaseController
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> Get(Guid id)
     {
-        var user = await _userRepository.GetUserByIdAsync(id);
+        var user = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
         if (user == null) return NotFound();
         return user;
 
@@ -42,7 +37,7 @@ public class UsersController : BaseController
     [HttpPut]
     public async Task<ActionResult> UpdateProfile(UpdateUserDto updatedUserDto)
     {
-        await _userRepository.UpdateUserAsync(User.GetUserId(), updatedUserDto);
+        await _unitOfWork.UserRepository.UpdateUserAsync(User.GetUserId(), updatedUserDto);
         return NoContent();
     }
 

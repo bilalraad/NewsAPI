@@ -4,25 +4,20 @@ using NewsAPI.Interfaces;
 
 namespace NewsAPI.Controllers;
 
-public class AuthController : BaseController
+public class AuthController(IUnitOfWork _unitOfWork) : BaseController
 {
-    private readonly IAuthRepository _authRepository;
 
-    public AuthController(IAuthRepository authRepository)
-    {
-        _authRepository = authRepository;
-    }
 
     [HttpPost("register")]
     public async Task<ActionResult<AuthDto>> RegisterAsync(RegisterDto registerDto)
     {
-        return Ok(await _authRepository.RegisterAsync(registerDto));
+        return Ok(await _unitOfWork.AuthRepository.RegisterAsync(registerDto));
     }
 
     [HttpPost("login")]
     public async Task<ActionResult<AuthDto>> Login(LoginDto loginDto)
     {
-        return Ok(await _authRepository.LoginAsync(loginDto));
+        return Ok(await _unitOfWork.AuthRepository.LoginAsync(loginDto));
     }
 
 }

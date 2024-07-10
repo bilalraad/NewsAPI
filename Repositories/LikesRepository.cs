@@ -65,7 +65,6 @@ namespace NewsAPI.Repositories
             };
             _context.NewsLikes.Add(newsLike);
             news.LikedByUsersCount++;
-            await _context.SaveChangesAsync();
         }
 
 
@@ -76,7 +75,6 @@ namespace NewsAPI.Repositories
             _context.NewsLikes.Remove(newsLike);
             News? news = await _context.News.FindAsync(newsId);
             news!.LikedByUsersCount--;
-            await _context.SaveChangesAsync();
 
         }
     }

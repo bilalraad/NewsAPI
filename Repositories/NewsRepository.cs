@@ -29,7 +29,7 @@ public class NewsRepository : INewsRepository
     {
         News newNews = _mapper.Map<News>(news);
         await _context.News.AddAsync(newNews);
-        await _context.SaveChangesAsync();
+
 
     }
 
@@ -38,7 +38,7 @@ public class NewsRepository : INewsRepository
         News? news = await _context.News.FindAsync(id);
         if (news == null) throw AppException.NotFound("News not found");
         _context.News.Remove(news);
-        await _context.SaveChangesAsync();
+
     }
 
     public async Task<PaginatedList<NewsDto>> GetAllNewsAsync(NewsFilter newsFilter)
@@ -86,16 +86,19 @@ public class NewsRepository : INewsRepository
 
     public async Task UpdateNewsAsync(Guid id, UpdateNewsDto updateNewsDto)
     {
+        // check if user has updated the images and it has a new main image
+        if (updateNewsDto.Photos != null && updateNewsDto.Photos.Any(p => p.IsMain))
+        {
+            if (updateNewsDto.Photos.Count(p => p.IsMain) > 1) throw AppException.BadRequest("Only one main image is allowed");
+        }
         News? oldNews = await _context.News.FindAsync(id);
         if (oldNews == null) throw AppException.NotFound("News not found"); ;
         _mapper.Map(updateNewsDto, oldNews);
-        await _context.SaveChangesAsync();
+
     }
 }
 
-// TODO: ADD THE NUMBER OF VIEWS
-// TODO: ADD THE NUMBER OF LIKES
-// TODO: ADD FAVORITES
-// TODO: ADD TAGS TABLE
-// TODO: ADD UPLOAD PHOTOS VALIDATION (ONLY ONE MAIN PHOTO)
+// TODO: ADD Categories
+// TODO: ADD LOCALIZATION
+
 

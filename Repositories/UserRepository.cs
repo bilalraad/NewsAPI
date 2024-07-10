@@ -1,6 +1,5 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewsAPI.DTOs;
 using NewsAPI.Errors;
@@ -35,7 +34,7 @@ namespace NewsAPI.Repositories
             if (user == null) throw AppException.NotFound("User not found");
 
             _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+
 
         }
 
@@ -69,12 +68,9 @@ namespace NewsAPI.Repositories
 
         public async Task UpdateUserAsync(Guid id, UpdateUserDto updateUserDto)
         {
-
             AppUser? oldUser = await _context.Users.FindAsync(id);
             if (oldUser == null) throw AppException.NotFound("User not found");
             _mapper.Map(updateUserDto, oldUser);
-            await _context.SaveChangesAsync();
-
         }
 
 
