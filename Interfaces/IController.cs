@@ -6,7 +6,7 @@ namespace NewsAPI.Controllers;
 [Route("api/[controller]")]
 [Produces("application/json")]
 [Consumes("application/json")]
-public class BaseController : ControllerBase
+public class IController : ControllerBase
 {
 
 }

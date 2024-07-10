@@ -11,7 +11,7 @@ namespace NewsAPI;
 
 
 [Authorize]
-public class UsersController(IUnitOfWork _unitOfWork) : BaseController
+public class UsersController(IUnitOfWork _unitOfWork) : IController
 {
 
 
