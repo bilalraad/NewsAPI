@@ -1,3 +1,5 @@
+using NewsAPI.Entities;
+
 namespace NewsAPI.DTOs
 {
     public class NewsDto
@@ -13,5 +15,6 @@ namespace NewsAPI.DTOs
         public required int LikedByUsersCount { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public required CategoryDto Category { get; set; }
     }
 }

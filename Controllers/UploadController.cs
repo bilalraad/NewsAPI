@@ -6,7 +6,7 @@ using NewsAPI.Interfaces;
 
 namespace NewsAPI.Controllers;
 
-public class UploadController(IUnitOfWork _unitOfWork) : IController
+public class UploadController(IUnitOfWork _unitOfWork) : BaseController
 {
 
 

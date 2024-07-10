@@ -15,5 +15,8 @@ namespace NewsAPI.DTOs
         public List<string> Tags { get; set; } = new();
         public bool IsPublished { get; set; } = true;
 
+        [Required]
+        public required Guid CategoryId { get; set; }
+
     }
 }

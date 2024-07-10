@@ -43,6 +43,7 @@ try
     var userManager = services.GetRequiredService<UserManager<NewsAPI.AppUser>>();
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
     await context.Database.MigrateAsync();
+    await Seed.CategoriesSeed(context);
     await Seed.UsersSeed(userManager, roleManager);
     await Seed.NewsSeed(context);
 }

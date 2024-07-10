@@ -1,12 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+using NewsAPI.Interfaces;
 
-namespace NewsAPI.Entities
+namespace NewsAPI.Entities;
+
+[Table("Categories")]
+public class Category : BaseEntity
 {
-    public class Category
-    {
-        
-    }
+    public required string Name { get; set; }
+
+    public string? Image { get; set; }
+
+    public List<News> News { get; set; } = new();
 }

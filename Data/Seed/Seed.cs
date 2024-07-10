@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using NewsAPI.DTOs;
 using NewsAPI.Entities;
 
@@ -59,6 +60,31 @@ public class Seed
         }
     }
 
+    private static async Task<List<Category>> GetCategories()
+    {
+        var categoriesData = await File.ReadAllTextAsync("Data/Seed/CategoriesSeed.json");
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        List<Category>? categories = JsonSerializer.Deserialize<List<Category>>(categoriesData, options);
+        return categories ?? new();
+    }
+
+    public static async Task CategoriesSeed(Context context)
+    {
+        if (!context.Categories.Any())
+        {
+            var categories = await GetCategories();
+
+            foreach (var category in categories ?? new())
+            {
+                await context.Categories.AddAsync(category);
+            }
+            await context.SaveChangesAsync();
+        }
+    }
+
     public static async Task NewsSeed(Context context)
     {
         if (!context.News.Any())
@@ -68,17 +94,19 @@ public class Seed
             {
                 PropertyNameCaseInsensitive = true
             };
-            List<CreateNewsDto>? newsList = JsonSerializer.Deserialize<List<CreateNewsDto>>(newsData, options);
+            List<UpdateNewsDto>? newsList = JsonSerializer.Deserialize<List<UpdateNewsDto>>(newsData, options);
+
 
 
             foreach (var newsObj in newsList ?? [])
             {
                 News news = new News
                 {
-                    Title = newsObj.Title,
-                    Content = newsObj.Content,
-                    Tags = newsObj.Tags,
+                    Title = newsObj.Title!,
+                    Content = newsObj.Content!,
+                    Tags = newsObj.Tags!,
                     AuthorId = Guid.NewGuid(),
+                    CategoryId = (await context.Categories.FirstAsync()).Id,
                     IsPublished = true,
                     ViewCount = new Random().Next(1, 100),
                 };

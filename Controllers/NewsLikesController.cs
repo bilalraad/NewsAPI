@@ -9,7 +9,7 @@ using NewsAPI.Interfaces;
 namespace NewsAPI.Controllers;
 
 [Authorize]
-public class NewsLikesController(IUnitOfWork _unitOfWork) : IController
+public class NewsLikesController(IUnitOfWork _unitOfWork) : BaseController
 {
 
 

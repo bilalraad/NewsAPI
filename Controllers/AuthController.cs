@@ -4,7 +4,7 @@ using NewsAPI.Interfaces;
 
 namespace NewsAPI.Controllers;
 
-public class AuthController(IUnitOfWork _unitOfWork) : IController
+public class AuthController(IUnitOfWork _unitOfWork) : BaseController
 {
 
 

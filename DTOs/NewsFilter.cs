@@ -8,6 +8,8 @@ public class NewsFilter : PagingDto
     public string? Search { get; set; }
     public List<string>? Tags { get; set; }
 
+    public Guid? CategoryId { get; set; }
+
     public SortingDto Sorting { get; set; } = new SortingDto();
 }
 

@@ -8,7 +8,7 @@ using NewsAPI.Interfaces;
 namespace NewsAPI.Controllers;
 
 [Authorize]
-public class NewsController(IUnitOfWork _unitOfWork) : IController
+public class NewsController(IUnitOfWork _unitOfWork) : BaseController
 {
 
 

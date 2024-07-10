@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "Category 1",
+    "Image": "https://picsum.photos/200/300"
+  },
+  {
+    "Name": "Category 2",
+    "Image": "https://picsum.photos/200/300"
+  },
+  {
+    "Name": "Category 3",
+    "Image": "https://picsum.photos/200/300"
+  }
+]

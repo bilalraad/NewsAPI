@@ -9,7 +9,8 @@ public class UnitOfWork(
     INewsRepository newsRepository,
     ILikesRepository likesRepository,
     IUploadRepository uploadRepository,
-    IUserRepository userRepository
+    IUserRepository userRepository,
+    ICategoryRepository categoryRepository
 ) : IUnitOfWork
 {
     public IAuthRepository AuthRepository => authRepository;
@@ -21,6 +22,8 @@ public class UnitOfWork(
     public IUploadRepository UploadRepository => uploadRepository;
 
     public IUserRepository UserRepository => userRepository;
+
+    public ICategoryRepository CategoryRepository => categoryRepository;
 
     public async Task Complete()
     {

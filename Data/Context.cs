@@ -13,8 +13,8 @@ public class Context(DbContextOptions options) : IdentityDbContext<AppUser, AppR
 
     public DbSet<News> News { get; set; }
     public DbSet<Photo> Photos { get; set; }
-
     public DbSet<NewsLike> NewsLikes { get; set; }
+    public DbSet<Category> Categories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -46,6 +46,16 @@ public class Context(DbContextOptions options) : IdentityDbContext<AppUser, AppR
             .WithMany(n => n.LikedByUsers)
             .HasForeignKey(nl => nl.TargetNewsId)
             .OnDelete(DeleteBehavior.Cascade);
+
+
+        modelBuilder.Entity<Category>()
+            .HasMany(c => c.News)
+            .WithOne(n => n.Category)
+            .HasForeignKey(n => n.CategoryId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+
+
 
     }
 

@@ -7,5 +7,6 @@ namespace NewsAPI.DTOs
         public List<PhotoDto>? Photos { get; set; }
         public List<string>? Tags { get; set; }
         public bool? IsPublished { get; set; }
+        public Guid? CategoryId { get; set; }
     }
 }

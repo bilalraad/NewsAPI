@@ -20,6 +20,7 @@ namespace NewsAPI.Helpers
             CreateMap<AppUser, UserDto>();
             CreateMap<RegisterDto, AppUser>();
             CreateMap<UpdateUserDto, AppUser>();
+            CreateMap<Category, CategoryDto>();
 
         }
 

@@ -1,6 +1,6 @@
 namespace NewsAPI.Interfaces;
 
-public class IEntity
+public class BaseEntity
 {
     public Guid Id { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;

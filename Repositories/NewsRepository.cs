@@ -56,12 +56,18 @@ public class NewsRepository : INewsRepository
         {
             query = query.Where(n => n.Tags.Any(t => newsFilter.Tags.Contains(t)));
         }
+        if (newsFilter.CategoryId != null)
+        {
+            query = query.Where(n => n.CategoryId == newsFilter.CategoryId);
+        }
 
 
         query = query.OrderByDynamic(newsFilter.Sorting.OrderBy.ToString(), newsFilter.Sorting.IsDescending);
 
 
-        var news = await query.AsNoTracking().PaginateAsync(newsFilter);
+        var news = await query.AsNoTracking()
+                                .Include(n => n.Category)
+                                .PaginateAsync(newsFilter);
 
         var newsDtos = _mapper.MapPaginatedList<News, NewsDto>(news);
 
@@ -98,7 +104,6 @@ public class NewsRepository : INewsRepository
     }
 }
 
-// TODO: ADD Categories
 // TODO: ADD LOCALIZATION
 
 

@@ -2,7 +2,7 @@ using NewsAPI.DTOs;
 using NewsAPI.Interfaces;
 
 namespace NewsAPI.Entities;
-public class News : IEntity
+public class News : BaseEntity
 {
     public required string Title { get; set; }
     public required string Content { get; set; }
@@ -19,5 +19,8 @@ public class News : IEntity
     public List<NewsLike> LikedByUsers { get; set; } = [];
 
     public int LikedByUsersCount { get; set; } = 0;
+
+    public Guid CategoryId { get; set; }
+    public Category Category { get; set; } = null!;
 
 }

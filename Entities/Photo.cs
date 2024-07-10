@@ -2,7 +2,7 @@ using NewsAPI.Interfaces;
 
 namespace NewsAPI.Entities;
 
-public class Photo : IEntity
+public class Photo : BaseEntity
 {
     public required string Url { get; set; }
     public string? Description { get; set; }

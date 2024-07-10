@@ -4,7 +4,7 @@ using NewsAPI.Interfaces;
 namespace NewsAPI.Entities;
 
 [Table("Comments")]
-public class Comment : IEntity
+public class Comment : BaseEntity
 {
     public required string Content { get; set; }
 

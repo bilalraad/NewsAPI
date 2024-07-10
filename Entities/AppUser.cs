@@ -13,7 +13,6 @@ public class AppUser : IdentityUser<Guid>
     public required string Name { get; set; }
     public Gender Gender { get; set; }
     public List<NewsLike> LikedNews { get; set; } = [];
-
     public List<AppUserRole> UserRoles { get; set; } = [];
 }
 
