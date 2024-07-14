@@ -44,7 +44,7 @@ public class NewsRepository : INewsRepository
     public async Task<PaginatedList<NewsDto>> GetAllNewsAsync(NewsFilter newsFilter)
     {
         var query = _context.News
-        .Where(n => n.DeletedAt == null || DateTime.Compare(DateTime.Now, n.DeletedAt.Value) < 0)
+        .Where(n => n.DeletedAt == null || DateTime.Compare(DateTime.UtcNow, n.DeletedAt.Value) < 0)
         .Where(n => n.IsPublished);
 
         if (!string.IsNullOrEmpty(newsFilter.Search))

@@ -11,6 +11,7 @@ public class Context(DbContextOptions options) : IdentityDbContext<AppUser, AppR
                 IdentityUserToken<Guid>>(options)
 {
 
+
     public DbSet<News> News { get; set; }
     public DbSet<Photo> Photos { get; set; }
     public DbSet<NewsLike> NewsLikes { get; set; }
@@ -19,7 +20,7 @@ public class Context(DbContextOptions options) : IdentityDbContext<AppUser, AppR
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         modelBuilder.Entity<NewsLike>()
             .HasKey(nl => new { nl.SourceUserId, nl.TargetNewsId });
 

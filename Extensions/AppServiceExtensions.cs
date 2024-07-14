@@ -53,7 +53,7 @@ namespace NewsAPI.Extensions
             //*: this is add to init the database
             services.AddDbContext<Context>(options =>
             {
-                options.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
 
             //*: this is add to detect all controllers

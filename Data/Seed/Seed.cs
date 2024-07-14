@@ -80,8 +80,8 @@ public class Seed
             foreach (var category in categories ?? new())
             {
                 await context.Categories.AddAsync(category);
+                await context.SaveChangesAsync();
             }
-            await context.SaveChangesAsync();
         }
     }
 
