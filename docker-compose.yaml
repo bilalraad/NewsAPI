@@ -1,12 +1,10 @@
-version: "3.8" # Specify Docker Compose version (3.1+ recommended)
-
 services:
   api:
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=User ID =SA;Password=Test@Bilal;Host=db;Port=5432;Database=NewsDB;Pooling=true;
+      - ConnectionStrings__DefaultConnection=User ID =NewsAdmin;Password=JyaxOki05lPiSodY;Host=db;Port=5432;Database=NewsDB;Pooling=true;
     ports:
       - "8080:8080" # Map host port 8000 to container port 80
     depends_on:
@@ -18,8 +16,8 @@ services:
     restart: always # Restart the container automatically if it stops
     environment:
       - POSTGRES_DB=NewsDB # Name of your database
-      - POSTGRES_USER=SA # Database user
-      - POSTGRES_PASSWORD=Test@Bilal # User's password
+      - POSTGRES_USER=NewsAdmin # Database user
+      - POSTGRES_PASSWORD=JyaxOki05lPiSodY # User's password
     ports:
       - "5432:5432" # Expose port 5432 for external access
     volumes:
@@ -33,3 +31,5 @@ volumes:
 networks:
   api-network:
     driver: bridge
+# docker-compose down
+# docker volume rm newsapi_postgres_data
