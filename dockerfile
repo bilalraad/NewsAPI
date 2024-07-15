@@ -19,6 +19,6 @@ COPY --from=build /app/out ./
 
 # Expose the port your application will run on
 EXPOSE 80
-
+EXPOSE 443
 # Start the application
 ENTRYPOINT ["dotnet", "NewsAPI.dll"]
