@@ -29,7 +29,7 @@ services:
     volumes:
       - postgres_data_dev:/var/lib/postgresql/data # Persist data even if the container is removed
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin"]
+      test: ["CMD-SHELL", "pg_isready -U NewsAdmin"]
       interval: 10s
       timeout: 5s
       retries: 5
