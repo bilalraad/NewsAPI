@@ -18,7 +18,7 @@ jobs:
           PRIVATE_KEY: ${{secrets.EC2_KEY}}
 
         run: |
-          git config --global --add safe.directory /home/${USER}/repos/NewsAPI
+          git config --system --add safe.directory /home/$ubuntu/repos/NewsAPI
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST_NAME} '
 
