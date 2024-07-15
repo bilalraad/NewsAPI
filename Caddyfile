@@ -1,0 +1,3 @@
+api.economynewsiq.com
+
+reverse_proxy :3000
