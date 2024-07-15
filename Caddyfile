@@ -1,3 +1,9 @@
-api.economynewsiq.com
+api.economynewsiq.com {
 
 reverse_proxy :3000
+}
+
+economynewsiq.com {
+
+reverse_proxy :3000
+}
